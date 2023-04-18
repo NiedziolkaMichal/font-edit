@@ -1,83 +1,121 @@
 import { FontBuffer } from "../io/buffer";
-import { NotSupportedException } from "../error/NotSupportedException";
+import { assertEqual, FontCorruptedError, NotSupportedError } from "../util/errors";
+import { Version } from "./openType";
+import { closestMaxPowerOfTwo } from "../util/math";
+import { HeaderData, HeaderTable } from "./otfReader";
 
-export enum Version {
-  /** TrueTypeCollection */
-  TTC = 0x74746366,
-  /** TrueType Version 1 */
-  TTV1 = 0x00010000,
-  /** TrueType Version 2 */
-  TTV2 = 0x74727565,
-  /** OpenType Font */
-  OT = 0x4f54544f,
+interface TableRecord {
+  /** Table identifier */
+  tableTag: number;
+  /** Checksum for this table */
+  checksum: number;
+  /** Offset from beginning of font file */
+  offset: number;
+  /** Length of this table */
+  length: number;
 }
 
-export interface Header {
-  /** sfntVersion */
-  version: Version;
-  /** Number of Tables */
-  tablesCount: number;
-  /** Maximum power of 2 less than or equal to tablesCount, times 16 */
-  readonly searchRange: number;
-  /** Log2 of the maximum power of 2 less than or equal to tablesCount (log2(searchRange/16), which is equal to floor(log2(tablesCount))) */
-  readonly entrySelector: number;
-  /** tablesCount times 16, minus searchRange */
-  readonly rangeShift: number;
-}
-
-export function readHeader(buffer: FontBuffer): Header {
+export function readHeader(buffer: FontBuffer, verify = true): HeaderData {
   const version = buffer.readUInt32();
 
   assertCorrectVersion(version);
-  if (!isSupportedVersion(version)) {
-    throw new NotSupportedException(`OTF Version ${version}`);
+  if (verify) {
+    assertCorrectVersion(version);
+    assertSupportedVersion(version);
   }
 
   const tablesCount = buffer.readUInt16();
-  //TODO in future it's better to simply move reader position, rather than verifying input
+
   const searchRange = buffer.readUInt16();
   const entrySelector = buffer.readUInt16();
   const rangeShift = buffer.readUInt16();
 
-  const header = createHeader(version, tablesCount);
+  const tableRecords = readTables(buffer, tablesCount);
+  const tables = readAllTableData(buffer, tableRecords, verify);
 
-  assertInputCorrect("searchRange", searchRange, header.searchRange);
-  assertInputCorrect("entrySelector", entrySelector, header.entrySelector);
-  assertInputCorrect("rangeShift", rangeShift, header.rangeShift);
+  const header = {
+    version,
+    tables
+  }
+
+  if(verify) {
+    assertEqual("Incorrect `searchRange` value", searchRange, calculateSearchRange(header));
+    assertEqual("Incorrect `entrySelector` value", entrySelector, calculateEntrySelector(header));
+    assertEqual("Incorrect `rangeShift` value", rangeShift, calculateRangeShift(header));
+    assertEqual("Incorrect total size", buffer.pos, buffer.getTotalSize());
+  }
 
   return header;
 }
 
-function createHeader(version: Version, tablesCount: number) {
+function readTables(buffer: FontBuffer, count: number) {
+  return Array.from({length: count}, () => readTable(buffer));
+}
+
+function readTable(buffer: FontBuffer): TableRecord {
+  const tableTag = buffer.readUInt32();
+  const checksum = buffer.readUInt32();
+  const offset = buffer.readUInt32();
+  const length = buffer.readUInt32();
+
   return {
-    version,
-    tablesCount,
-    get searchRange() {
-      return closestMaxPowerOfTwo(this.tablesCount) * 16;
-    },
-    get entrySelector() {
-      return Math.floor(Math.log2(closestMaxPowerOfTwo(this.tablesCount)));
-    },
-    get rangeShift() {
-      return this.tablesCount * 16 - this.searchRange;
-    },
-  };
-}
-
-function assertCorrectVersion(versionTag: number): asserts versionTag is Version {
-  if (!Version[versionTag]) throw new NotSupportedException(`OTF Version ${versionTag}`);
-}
-
-function assertInputCorrect(name: string, input: number, calculatedVal: number) {
-  if (input !== calculatedVal) {
-    throw new Error(`Header value ${name} has been incorrectly calculated`);
+    tableTag,
+    checksum,
+    offset,
+    length
   }
 }
 
-function isSupportedVersion(version: Version) {
-  return version === Version.TTV1;
+function readAllTableData(buffer: FontBuffer, tables: TableRecord[], verify: boolean): HeaderTable[] {
+  const sortedByOffset = tables.sort((t1, t2) => t1.offset - t2.offset);
+  const readTables: HeaderTable[] = [];
+
+  for(const table of sortedByOffset) {
+    if(verify && table.offset !== buffer.pos) {
+      throw new FontCorruptedError("Invalid table offset");
+    }
+    const data = buffer.extractBytes(table.length);
+    //TODO verify checksum
+
+    const paddingLength = calculatePadding(table.length);
+    if(paddingLength) {
+      buffer.readBytes(paddingLength)
+    }
+
+    readTables.push({
+      tableTag: table.tableTag,
+      data
+    })
+  }
+  return readTables;
 }
 
-function closestMaxPowerOfTwo(max: number) {
-  return 1 << (31 - Math.clz32(max));
+function assertCorrectVersion(versionTag: number): asserts versionTag is Version {
+  if (!Version[versionTag]) {
+    throw new NotSupportedError(`OTF Version ${versionTag}`);
+  }
+}
+
+function assertSupportedVersion(versionTag: number) {
+  if(versionTag !== Version.TTV1) {
+    throw new NotSupportedError(`OTF Version ${versionTag}`)
+  }
+}
+
+function calculatePadding(tableLength: number) {
+  if(tableLength % 4 == 0)
+    return 0;
+  return 4 - (tableLength % 4);
+}
+
+function calculateSearchRange(header: HeaderData) {
+  return closestMaxPowerOfTwo(header.tables.length) * 16;
+}
+
+function calculateEntrySelector(header: HeaderData) {
+  return Math.floor(Math.log2(closestMaxPowerOfTwo(header.tables.length)));
+}
+
+function calculateRangeShift(header: HeaderData) {
+  return header.tables.length * 16 - calculateSearchRange(header);
 }
