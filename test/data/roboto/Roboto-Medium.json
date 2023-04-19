@@ -1,0 +1,39 @@
+{
+  "name": {
+    "tableVersion": 0,
+    "recordsPerLanguage": {
+      "en-US": {
+        "copyrightNotice": "Copyright 2011 Google Inc. All Rights Reserved.",
+        "familyName": "Roboto Medium",
+        "uniqueFontIdentifier": "Roboto Medium",
+        "fullFontName": "Roboto Medium",
+        "subfamilyName": "Regular",
+        "version": "Version 2.137; 2017",
+        "postScriptName": "Roboto-Medium",
+        "trademark": "Roboto is a trademark of Google.",
+        "designer": "Google",
+        "urlVendor": "Google.com",
+        "urlDesigner": "Christian Robertson",
+        "licenseDescription": "Licensed under the Apache License, Version 2.0",
+        "licenseInfo": "http://www.apache.org/licenses/LICENSE-2.0",
+        "topographicFamilyName": "Roboto",
+        "typographicSubfamilyName": "Medium"
+      }
+    },
+    "copyrightNotice": "Copyright 2011 Google Inc. All Rights Reserved.",
+    "familyName": "Roboto Medium",
+    "uniqueFontIdentifier": "Roboto Medium",
+    "fullFontName": "Roboto Medium",
+    "subfamilyName": "Regular",
+    "version": "Version 2.137; 2017",
+    "postScriptName": "Roboto-Medium",
+    "trademark": "Roboto is a trademark of Google.",
+    "designer": "Google",
+    "urlVendor": "Google.com",
+    "urlDesigner": "Christian Robertson",
+    "licenseDescription": "Licensed under the Apache License, Version 2.0",
+    "licenseInfo": "http://www.apache.org/licenses/LICENSE-2.0",
+    "topographicFamilyName": "Roboto",
+    "typographicSubfamilyName": "Medium"
+  }
+}

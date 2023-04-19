@@ -20,7 +20,7 @@ export class Font {
     if (this.#loadedTables.has(tag)) {
       return this.#loadedTables.get(tag) as T;
     }
-
+    //TODO after loading data, we could release DataView, so eventually ArrayBuffer can be garbage collected
     for (const table of this.#header.tables) {
       if (table.tableTag === tag) {
         const data = reader(table.data);

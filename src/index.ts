@@ -2,7 +2,7 @@ import { readSync } from "./io/fsLoader";
 import { readOpenType } from "./otf/otfReader";
 
 export function loadSync(path: string) {
-  const content = readSync(path);
+  const content = readSync(path).buffer;
   return load(content);
 }
 

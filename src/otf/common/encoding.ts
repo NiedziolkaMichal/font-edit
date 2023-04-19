@@ -8,7 +8,7 @@ export enum EncodingPlatformId {
 
 const ENCODING_UNICODE = "utf-16be";
 const MACINTOSH_ENCODING_IDS = ["x-mac-roman"]; //TODO plenty are missing
-const WINDOWS_ENCODING_IDS = ["utf-16be", "utf-16be", "SJIS", "GBK", "big5", "euc-kr", "johab" /* 3x reserved */, , , , "utf-16"];
+const WINDOWS_ENCODING_IDS = ["utf-16be", "utf-16be", "SJIS", "GBK", "big5", "euc-kr", "johab", /* 3x reserved */ undefined, undefined, undefined, "utf-16"];
 
 export function getEncoding(platformId: EncodingPlatformId, encodingId: number) {
   const encoding = () => {
