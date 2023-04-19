@@ -1,4 +1,3 @@
-
 export enum Version {
   /** TrueTypeCollection */
   TTC = 0x74746366,
@@ -10,3 +9,6 @@ export enum Version {
   OT = 0x4f54544f,
 }
 
+export enum TableTag {
+  NAME = 0x6e616d65,
+}

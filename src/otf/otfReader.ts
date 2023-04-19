@@ -1,6 +1,7 @@
 import { FontBuffer } from "../io/buffer";
 import { readHeader } from "./sfntHeader";
 import { Version } from "./openType";
+import { Font } from "./Font";
 
 export interface HeaderData {
   version: Version;
@@ -12,11 +13,9 @@ export interface HeaderTable {
   data: FontBuffer;
 }
 
-export function readOpenType(buffer: ArrayBufferLike, verify = true) {
+export function readOpenType(buffer: ArrayBufferLike) {
   const fontBuffer = new FontBuffer(buffer);
   const header = readHeader(fontBuffer);
 
-  return {
-    header,
-  };
+  return new Font(header);
 }

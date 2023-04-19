@@ -1,3 +1,5 @@
+import { arrayFrom } from "../util/misc";
+
 export class FontBuffer {
   private dataView;
   public pos: number;
@@ -20,17 +22,17 @@ export class FontBuffer {
   }
 
   readUInt8() {
-    return this.dataView.getUint16(this.pos++);
+    return this.dataView.getUint8(this.pos++);
   }
 
-  readBytes(length: number, ) {
-    return Array.from({length}, () => this.readUInt8());
+  readBytes(length: number) {
+    return arrayFrom(length, () => this.readUInt8());
   }
 
   extractBytes(length: number) {
-    const val = new DataView(this.dataView.buffer, this.pos, length);
+    const val = new DataView(this.dataView.buffer, this.dataView.byteOffset + this.pos, length);
     this.pos += length;
-    return new FontBuffer(val);
+    return val;
   }
 
   getTotalSize() {

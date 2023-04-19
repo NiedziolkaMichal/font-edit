@@ -10,7 +10,10 @@
   },
   "lint-staged": {
     "*": "prettier -w",
-    "*.{ts}": ["eslint --fix", "jest"]
+    "*.{ts}": [
+      "eslint --fix",
+      "jest"
+    ]
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
