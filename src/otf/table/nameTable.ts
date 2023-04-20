@@ -32,7 +32,7 @@ export function readNameTable(buffer: FontBuffer): NameTable {
 
   const nameTable: NameTable = {
     tableVersion: version,
-    recordsPerLanguage: {},
+    recordsPerLanguage: {}, //TODO single source of truth
   };
 
   let previousLength = 0;

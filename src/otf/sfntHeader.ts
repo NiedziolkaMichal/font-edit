@@ -92,7 +92,8 @@ function assertCorrectVersion(versionTag: number): asserts versionTag is Version
 }
 
 function assertSupportedVersion(versionTag: number) {
-  if (versionTag !== Version.TTV1) {
+  if (versionTag !== Version.TTV1 && versionTag !== Version.OT) {
+    //TODO other versions
     throw new NotSupportedError(`OTF Version ${versionTag}`);
   }
 }

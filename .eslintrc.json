@@ -9,7 +9,7 @@
   },
   "overrides": [
     {
-      "files": ["src/**/*.ts"]
+      "files": ["src/**/*.ts", "test/**/*.ts"]
     }
   ]
 }
