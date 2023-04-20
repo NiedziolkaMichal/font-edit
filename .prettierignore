@@ -4,3 +4,6 @@ package-lock.json
 !.eslintrc.json
 !.prettierrc.json
 dist
+*.txt
+*.ttf
+*.otf

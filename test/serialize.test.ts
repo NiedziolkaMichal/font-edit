@@ -4,14 +4,19 @@ import { readJSON, serializeFont } from "./util/serialize";
 
 const FONTS = [
   {
-    name: "Roboto-Medium",
-    fontPath: "roboto/Roboto-Medium.ttf",
-    jsonPath: "roboto/Roboto-Medium.json",
+    name: "Abyssinica SIL",
+    fontPath: "AbyssinicaSIL/AbyssinicaSIL-Regular.ttf",
+    jsonPath: "AbyssinicaSIL/AbyssinicaSIL-Regular.json",
   },
   {
     name: "Noto Sans HK",
     fontPath: "NotoSansHK/NotoSansHK-Thin.otf",
     jsonPath: "NotoSansHK/NotoSansHK-Thin.json",
+  },
+  {
+    name: "Roboto-Medium",
+    fontPath: "roboto/Roboto-Medium.ttf",
+    jsonPath: "roboto/Roboto-Medium.json",
   },
 ];
 

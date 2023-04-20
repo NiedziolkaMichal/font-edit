@@ -459,7 +459,7 @@ export const WINDOWS_LANGUAGE_CODES: Record<number, string> = {
   58380: "fr-015",
 };
 
-export function getDefaultLanguageTag(platformId: EncodingPlatformId) {
+export function getDefaultLanguageTag(platformId: EncodingPlatformId = EncodingPlatformId.WINDOWS) {
   switch (platformId) {
     case EncodingPlatformId.UNICODE:
       return ""; // There are no platform-specific language IDs defined for the Unicode platform.

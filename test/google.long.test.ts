@@ -1,5 +1,6 @@
 import { load } from "../src";
 import { getCacheFonts, prepareCache } from "./util/cache";
+import { serializeFont } from "./util/serialize";
 
 const MIN_EXPECTED_FONTS = 9000;
 
@@ -19,7 +20,8 @@ describe("Google Fonts", () => {
       let count = 0;
       for await (const { path, data } of cache) {
         try {
-          load(data.buffer);
+          const font = load(data.buffer);
+          serializeFont(font);
           count++;
         } catch (e) {
           throw new Error(`Failed on file ${path}. ${(e as Error).message}`);
