@@ -4,8 +4,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "style": "prettier . -w && eslint ./src --fix",
-    "test": "jest",
+    "style": "prettier . -w && eslint ./src ./test --fix",
+    "test": "jest --filter=./test/util/skipLongTests.js",
+    "test:all": "jest",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -22,9 +23,11 @@
     "dist"
   ],
   "devDependencies": {
+    "@types/decompress": "^4.2.4",
     "@types/jest": "^29.5.0",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
+    "decompress": "^4.2.1",
     "eslint": "^8.38.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
