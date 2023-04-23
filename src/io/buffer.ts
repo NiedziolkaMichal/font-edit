@@ -68,6 +68,12 @@ export class FontBuffer {
     return new Date((int64 - YEAR_1904_EPOCH) * 1000);
   }
 
+  readVersion() {
+    const decimal = this.readInt16();
+    const fraction = this.readUInt16();
+    return decimal + fraction / 0x1000 / 10;
+  }
+
   getTotalSize() {
     return this.dataView.byteLength;
   }

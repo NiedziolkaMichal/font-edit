@@ -40,5 +40,22 @@
       "instructionsAlterAdvanceWidth": true
     },
     "macStyle": {}
+  },
+  "maxp": {
+    "version": 1,
+    "numGlyphs": 1294,
+    "maxPoints": 143,
+    "maxContours": 22,
+    "maxCompositePoints": 78,
+    "maxCompositeContours": 5,
+    "maxZones": 1,
+    "maxTwilightPoints": 0,
+    "maxStorage": 0,
+    "maxFunctionDefs": 14,
+    "maxInstructionDefs": 0,
+    "maxStackElements": 512,
+    "maxSizeOfInstructions": 560,
+    "maxComponentElements": 6,
+    "maxComponentDepth": 1
   }
 }

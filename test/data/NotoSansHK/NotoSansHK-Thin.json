@@ -41,5 +41,9 @@
       "leftAtX0": true
     },
     "macStyle": {}
+  },
+  "maxp": {
+    "version": 0.5,
+    "numGlyphs": 20806
   }
 }

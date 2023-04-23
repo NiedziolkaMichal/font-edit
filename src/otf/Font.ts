@@ -3,6 +3,7 @@ import { TableTag } from "./openType";
 import { readNameTable } from "./table/nameTable";
 import { FontBuffer } from "../io/buffer";
 import { readHeadTable } from "./table/headTable";
+import { readMaxpTable } from "./table/maxpTable";
 
 export class Font {
   readonly #header;
@@ -19,6 +20,10 @@ export class Font {
 
   get head() {
     return this.getTable(TableTag.HEAD, readHeadTable);
+  }
+
+  get maxp() {
+    return this.getTable(TableTag.MAXP, readMaxpTable);
   }
 
   private getTable<T>(tag: TableTag, reader: (buffer: FontBuffer) => T) {

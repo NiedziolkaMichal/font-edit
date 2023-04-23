@@ -200,5 +200,22 @@
       "leftAtX0": true
     },
     "macStyle": {}
+  },
+  "maxp": {
+    "version": 1,
+    "numGlyphs": 1037,
+    "maxPoints": 232,
+    "maxContours": 16,
+    "maxCompositePoints": 138,
+    "maxCompositeContours": 5,
+    "maxZones": 1,
+    "maxTwilightPoints": 0,
+    "maxStorage": 0,
+    "maxFunctionDefs": 0,
+    "maxInstructionDefs": 0,
+    "maxStackElements": 0,
+    "maxSizeOfInstructions": 0,
+    "maxComponentElements": 2,
+    "maxComponentDepth": 1
   }
 }

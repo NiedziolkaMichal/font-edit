@@ -13,7 +13,7 @@
     "*": "prettier -w",
     "*.ts": [
       "eslint --fix",
-      "jest"
+      "jest --findRelatedTests"
     ]
   },
   "main": "dist/index.js",
