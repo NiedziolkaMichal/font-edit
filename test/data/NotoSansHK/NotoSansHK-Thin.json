@@ -20,5 +20,26 @@
     "familyName": "Noto Sans HK Thin",
     "fullFontName": "Noto Sans HK Thin",
     "copyrightNotice": "© 2014-2020 Adobe (http://www.adobe.com/)."
+  },
+  "head": {
+    "majorVersion": 1,
+    "minorVersion": 0,
+    "fontRevision": 2.002,
+    "unitsPerEm": 1000,
+    "created": "2020-11-03T21:07:11.000Z",
+    "modified": "2020-11-09T22:01:12.000Z",
+    "xMin": -991,
+    "yMin": -1050,
+    "xMax": 2930,
+    "yMax": 1810,
+    "lowestRecPPEM": 3,
+    "fontDirectionHint": 2,
+    "indexToLocFormat": 0,
+    "glyphDataFormat": 0,
+    "flags": {
+      "baselineAtY0": true,
+      "leftAtX0": true
+    },
+    "macStyle": {}
   }
 }

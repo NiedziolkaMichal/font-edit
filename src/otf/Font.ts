@@ -2,6 +2,7 @@ import { HeaderData } from "./otfReader";
 import { TableTag } from "./openType";
 import { readNameTable } from "./table/nameTable";
 import { FontBuffer } from "../io/buffer";
+import { readHeadTable } from "./table/headTable";
 
 export class Font {
   readonly #header;
@@ -14,6 +15,10 @@ export class Font {
 
   get name() {
     return this.getTable(TableTag.NAME, readNameTable);
+  }
+
+  get head() {
+    return this.getTable(TableTag.HEAD, readHeadTable);
   }
 
   private getTable<T>(tag: TableTag, reader: (buffer: FontBuffer) => T) {

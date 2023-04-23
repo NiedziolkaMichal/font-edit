@@ -28,8 +28,10 @@ describe("Serialize", () => {
     const font = loadSync(fontFullPath);
 
     const output = serializeFont(font);
+    const parsedJSONOutput = JSON.parse(JSON.stringify(output)); // Converting objects like Date to string
     const expectedOutput = readJSON(jsonFullPath);
 
-    expect(output).toMatchObject(expectedOutput);
+    expect(parsedJSONOutput).toMatchObject(expectedOutput);
+    expect(expectedOutput).toMatchObject(parsedJSONOutput);
   });
 });

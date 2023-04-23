@@ -18,5 +18,27 @@
     "licenseInfo": "http://www.apache.org/licenses/LICENSE-2.0",
     "topographicFamilyName": "Roboto",
     "typographicSubfamilyName": "Medium"
+  },
+  "head": {
+    "majorVersion": 1,
+    "minorVersion": 0,
+    "fontRevision": 2.137,
+    "unitsPerEm": 2048,
+    "created": "2008-09-12T12:29:34.000Z",
+    "modified": "2017-03-29T12:02:52.000Z",
+    "xMin": -1500,
+    "yMin": -555,
+    "xMax": 2396,
+    "yMax": 2163,
+    "lowestRecPPEM": 9,
+    "fontDirectionHint": 2,
+    "indexToLocFormat": 0,
+    "glyphDataFormat": 0,
+    "flags": {
+      "baselineAtY0": true,
+      "forcePpemToInt": true,
+      "instructionsAlterAdvanceWidth": true
+    },
+    "macStyle": {}
   }
 }
