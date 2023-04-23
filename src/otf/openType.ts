@@ -13,4 +13,5 @@ export enum TableTag {
   NAME = 0x6e616d65,
   HEAD = 0x68656164,
   MAXP = 0x6d617870,
+  HHEA = 0x68686561,
 }

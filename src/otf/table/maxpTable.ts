@@ -40,16 +40,19 @@ export interface MaxpTableV1 {
 
 export function readMaxpTable(buffer: FontBuffer): MaxpTableV1 | MaxpTableV05 {
   const version = buffer.readVersion();
+  let data: MaxpTableV1 | MaxpTableV05 | undefined = undefined;
   if (version === 0.5) {
-    return {
+    data = {
       version: 0.5,
       numGlyphs: buffer.readUInt16(),
     };
   } else if (version === 1) {
-    return readV1(buffer);
+    data = readV1(buffer);
   } else {
     throw new FontCorruptedError(`Invalid MAXP version ${version}`);
   }
+  buffer.assertEmpty("MAXP");
+  return data;
 }
 
 function readV1(buffer: FontBuffer) {

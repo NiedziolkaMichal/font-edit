@@ -45,5 +45,19 @@
   "maxp": {
     "version": 0.5,
     "numGlyphs": 20806
+  },
+  "hhea": {
+    "ascender": 1160,
+    "descender": -288,
+    "lineGap": 0,
+    "advanceWidthMax": 3000,
+    "minLeftSideBearing": -991,
+    "minRightSideBearing": -519,
+    "xMaxExtent": 2930,
+    "caretSlopeRise": 1,
+    "caretSlopeRun": 0,
+    "caretOffset": 0,
+    "metricDataFormat": 0,
+    "numberOfHMetrics": 20806
   }
 }

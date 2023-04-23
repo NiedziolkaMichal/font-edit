@@ -80,6 +80,7 @@ export function readHeadTable(buffer: FontBuffer): HeadTable {
   assertEqual("Head table magic number", magicNumber, EXPECTED_MAGIC_NUMBER);
   const parsedFlags = parseHeadFlags(flags);
   const parsedMacStyle = parseMacStyles(macStyle);
+  buffer.assertEmpty("HEAD");
 
   return {
     ...other,

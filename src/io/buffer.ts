@@ -1,4 +1,5 @@
 import { arrayFrom } from "../util/misc";
+import { FontCorruptedError } from "../util/errors";
 
 /* Difference between UNIX time and number of seconds since 12:00 midnight, January 1, 1904, UTC */
 const YEAR_1904_EPOCH = 2082844800;
@@ -78,7 +79,9 @@ export class FontBuffer {
     return this.dataView.byteLength;
   }
 
-  available() {
-    return this.dataView.byteLength - this.pos;
+  assertEmpty(tableName: string) {
+    if (this.dataView.byteLength - this.pos !== 0) {
+      throw new FontCorruptedError(`Invalid additional data in ${tableName} table`);
+    }
   }
 }

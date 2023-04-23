@@ -1,5 +1,5 @@
 import { FontBuffer } from "../../io/buffer";
-import { assertEqual, FontCorruptedError, NotSupportedError } from "../../util/errors";
+import { FontCorruptedError, NotSupportedError } from "../../util/errors";
 import { arrayFrom, sort } from "../../util/misc";
 import { decodeString } from "../common/encoding";
 import { getDefaultLanguageTag, getLanguageTag } from "../common/language";
@@ -34,7 +34,9 @@ export function readNameTable(buffer: FontBuffer): NameTable {
   //TODO data in between current position and storageOffset
   buffer.pos = storageOffset;
 
-  return decodeToNameTable(buffer, version, nameRecords);
+  const data = decodeToNameTable(buffer, version, nameRecords);
+  buffer.assertEmpty("NAME");
+  return data;
 }
 
 function decodeToNameTable(buffer: FontBuffer, version: AllowedTableVersions, nameRecords: ReturnType<typeof readNameRecord>[]) {
@@ -89,8 +91,6 @@ function decodeNameRecords(buffer: FontBuffer, nameRecords: ReturnType<typeof re
       language,
     });
   }
-
-  assertEqual("Leftover data in name table", buffer.pos, buffer.getTotalSize());
   return decodedRecords;
 }
 

@@ -57,5 +57,19 @@
     "maxSizeOfInstructions": 560,
     "maxComponentElements": 6,
     "maxComponentDepth": 1
+  },
+  "hhea": {
+    "ascender": 1900,
+    "descender": -500,
+    "lineGap": 0,
+    "advanceWidthMax": 2411,
+    "minLeftSideBearing": -1500,
+    "minRightSideBearing": -447,
+    "xMaxExtent": 2396,
+    "caretSlopeRise": 1,
+    "caretSlopeRun": 0,
+    "caretOffset": 0,
+    "metricDataFormat": 0,
+    "numberOfHMetrics": 1294
   }
 }
