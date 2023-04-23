@@ -5,6 +5,7 @@ import { FontBuffer } from "../io/buffer";
 import { readHeadTable } from "./table/headTable";
 import { readMaxpTable } from "./table/maxpTable";
 import { readHheaTable } from "./table/hheaTable";
+import { readOs2Table } from "./table/os2Table";
 
 export class Font {
   readonly #header;
@@ -29,6 +30,10 @@ export class Font {
 
   get hhea() {
     return this.getTable(TableTag.HHEA, readHheaTable);
+  }
+
+  get os2() {
+    return this.getTable(TableTag.OS2, readOs2Table);
   }
 
   private getTable<T>(tag: TableTag, reader: (buffer: FontBuffer) => T) {

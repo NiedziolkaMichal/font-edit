@@ -75,6 +75,10 @@ export class FontBuffer {
     return decimal + fraction / 0x1000 / 10;
   }
 
+  readTag() {
+    return String.fromCharCode(...this.readBytes(4));
+  }
+
   getTotalSize() {
     return this.dataView.byteLength;
   }
