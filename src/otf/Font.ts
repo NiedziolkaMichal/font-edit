@@ -6,6 +6,7 @@ import { readHeadTable } from "./table/headTable";
 import { readMaxpTable } from "./table/maxpTable";
 import { readHheaTable } from "./table/hheaTable";
 import { readOs2Table } from "./table/os2Table";
+import { readPostTable } from "./table/postTable";
 
 const internalsCache = new WeakMap<Font, Internals>();
 
@@ -32,6 +33,10 @@ export class Font {
 
   get os2() {
     return getTable(this, TableTag.OS2, readOs2Table);
+  }
+
+  get post() {
+    return getTable(this, TableTag.POST, readPostTable);
   }
 }
 

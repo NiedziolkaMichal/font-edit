@@ -109,5 +109,16 @@
     "usDefaultChar": 0,
     "usBreakChar": 32,
     "usMaxContext": 6
+  },
+  "post": {
+    "version": 3,
+    "italicAngle": 0,
+    "underlinePosition": -125,
+    "underlineThickness": 50,
+    "isFixedPitch": 0,
+    "minMemType42": 0,
+    "maxMemType42": 0,
+    "minMemType1": 0,
+    "maxMemType1": 0
   }
 }

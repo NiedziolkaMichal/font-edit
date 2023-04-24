@@ -15,4 +15,5 @@ export enum TableTag {
   MAXP = 0x6d617870,
   HHEA = 0x68686561,
   OS2 = 0x4f532f32,
+  POST = 0x706f7374,
 }

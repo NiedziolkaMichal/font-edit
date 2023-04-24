@@ -9,6 +9,11 @@ const FONTS = [
     jsonPath: "AbyssinicaSIL/AbyssinicaSIL-Regular.json",
   },
   {
+    name: "Caudex",
+    fontPath: "Caudex/Caudex-Regular.ttf",
+    jsonPath: "Caudex/Caudex-Regular.json",
+  },
+  {
     name: "Noto Sans HK",
     fontPath: "NotoSansHK/NotoSansHK-Thin.otf",
     jsonPath: "NotoSansHK/NotoSansHK-Thin.json",

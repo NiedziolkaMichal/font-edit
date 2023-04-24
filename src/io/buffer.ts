@@ -67,11 +67,19 @@ export function readVersion(buffer: FontBuffer) {
 }
 
 export function readTag(buffer: FontBuffer) {
-  return String.fromCharCode(...readBytes(buffer, 4));
+  return readString(buffer, 4);
+}
+
+export function readString(buffer: FontBuffer, amountOfBytes: number) {
+  return String.fromCharCode(...readBytes(buffer, amountOfBytes));
 }
 
 export function bufferTotalSize(buffer: FontBuffer) {
   return buffer._dataView.byteLength;
+}
+
+export function bufferAvailable(buffer: FontBuffer) {
+  return bufferTotalSize(buffer) - buffer._pos;
 }
 
 export function assertBufferEmpty(buffer: FontBuffer, tableName: string) {
