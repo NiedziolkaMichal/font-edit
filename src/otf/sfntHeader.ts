@@ -1,4 +1,4 @@
-import { FontBuffer } from "../io/buffer";
+import { bufferTotalSize, extractBytes, FontBuffer, readBytes, readUInt16, readUInt32 } from "../io/buffer";
 import { assertEqual, FontCorruptedError, NotSupportedError } from "../util/errors";
 import { Version } from "./openType";
 import { closestMaxPowerOfTwo } from "../util/math";
@@ -17,16 +17,16 @@ interface TableRecord {
 }
 
 export function readHeader(buffer: FontBuffer): HeaderData {
-  const version = buffer.readUInt32();
+  const version = readUInt32(buffer);
 
   assertCorrectVersion(version);
   assertSupportedVersion(version);
 
-  const tablesCount = buffer.readUInt16();
+  const tablesCount = readUInt16(buffer);
 
-  const searchRange = buffer.readUInt16();
-  const entrySelector = buffer.readUInt16();
-  const rangeShift = buffer.readUInt16();
+  const searchRange = readUInt16(buffer);
+  const entrySelector = readUInt16(buffer);
+  const rangeShift = readUInt16(buffer);
 
   const tableRecords = readTables(buffer, tablesCount);
   const tables = readAllTableData(buffer, tableRecords);
@@ -39,7 +39,7 @@ export function readHeader(buffer: FontBuffer): HeaderData {
   assertEqual("Incorrect `searchRange` value", searchRange, calculateSearchRange(header));
   assertEqual("Incorrect `entrySelector` value", entrySelector, calculateEntrySelector(header));
   assertEqual("Incorrect `rangeShift` value", rangeShift, calculateRangeShift(header));
-  assertEqual("Incorrect total size", buffer.pos, buffer.getTotalSize());
+  assertEqual("Incorrect total size", buffer._pos, bufferTotalSize(buffer));
 
   return header;
 }
@@ -49,10 +49,10 @@ function readTables(buffer: FontBuffer, count: number) {
 }
 
 function readTable(buffer: FontBuffer): TableRecord {
-  const tableTag = buffer.readUInt32();
-  const checksum = buffer.readUInt32();
-  const offset = buffer.readUInt32();
-  const length = buffer.readUInt32();
+  const tableTag = readUInt32(buffer);
+  const checksum = readUInt32(buffer);
+  const offset = readUInt32(buffer);
+  const length = readUInt32(buffer);
 
   return {
     tableTag,
@@ -66,15 +66,15 @@ function readAllTableData(buffer: FontBuffer, tables: TableRecord[]): HeaderTabl
   const readTables: HeaderTable[] = [];
 
   for (const table of sort(tables, "offset")) {
-    if (table.offset !== buffer.pos) {
+    if (table.offset !== buffer._pos) {
       throw new FontCorruptedError("Invalid table offset");
     }
-    const data = new FontBuffer(buffer.extractBytes(table.length));
+    const data = new FontBuffer(extractBytes(buffer, table.length));
     //TODO verify checksum
 
     const paddingLength = calculatePadding(table.length);
     if (paddingLength) {
-      buffer.readBytes(paddingLength);
+      readBytes(buffer, paddingLength);
     }
 
     readTables.push({

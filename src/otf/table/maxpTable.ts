@@ -1,4 +1,4 @@
-import { FontBuffer } from "../../io/buffer";
+import { assertBufferEmpty, FontBuffer, readUInt16, readVersion } from "../../io/buffer";
 import { FontCorruptedError } from "../../util/errors";
 
 export interface MaxpTableV05 {
@@ -39,38 +39,38 @@ export interface MaxpTableV1 {
 }
 
 export function readMaxpTable(buffer: FontBuffer): MaxpTableV1 | MaxpTableV05 {
-  const version = buffer.readVersion();
+  const version = readVersion(buffer);
   let data: MaxpTableV1 | MaxpTableV05 | undefined = undefined;
   if (version === 0.5) {
     data = {
       version: 0.5,
-      numGlyphs: buffer.readUInt16(),
+      numGlyphs: readUInt16(buffer),
     };
   } else if (version === 1) {
     data = readV1(buffer);
   } else {
     throw new FontCorruptedError(`Invalid MAXP version ${version}`);
   }
-  buffer.assertEmpty("MAXP");
+  assertBufferEmpty(buffer, "MAXP");
   return data;
 }
 
 function readV1(buffer: FontBuffer) {
   return {
     version: 1,
-    numGlyphs: buffer.readUInt16(),
-    maxPoints: buffer.readUInt16(),
-    maxContours: buffer.readUInt16(),
-    maxCompositePoints: buffer.readUInt16(),
-    maxCompositeContours: buffer.readUInt16(),
-    maxZones: buffer.readUInt16(),
-    maxTwilightPoints: buffer.readUInt16(),
-    maxStorage: buffer.readUInt16(),
-    maxFunctionDefs: buffer.readUInt16(),
-    maxInstructionDefs: buffer.readUInt16(),
-    maxStackElements: buffer.readUInt16(),
-    maxSizeOfInstructions: buffer.readUInt16(),
-    maxComponentElements: buffer.readUInt16(),
-    maxComponentDepth: buffer.readUInt16(),
+    numGlyphs: readUInt16(buffer),
+    maxPoints: readUInt16(buffer),
+    maxContours: readUInt16(buffer),
+    maxCompositePoints: readUInt16(buffer),
+    maxCompositeContours: readUInt16(buffer),
+    maxZones: readUInt16(buffer),
+    maxTwilightPoints: readUInt16(buffer),
+    maxStorage: readUInt16(buffer),
+    maxFunctionDefs: readUInt16(buffer),
+    maxInstructionDefs: readUInt16(buffer),
+    maxStackElements: readUInt16(buffer),
+    maxSizeOfInstructions: readUInt16(buffer),
+    maxComponentElements: readUInt16(buffer),
+    maxComponentDepth: readUInt16(buffer),
   } as const;
 }

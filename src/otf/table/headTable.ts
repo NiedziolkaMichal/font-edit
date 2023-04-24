@@ -1,4 +1,4 @@
-import { FontBuffer } from "../../io/buffer";
+import { assertBufferEmpty, FontBuffer, readFixed, readInt16, readLongDateTime, readUInt16, readUInt32 } from "../../io/buffer";
 import { assertEqual } from "../../util/errors";
 import { parseFlags } from "../../io/parseUtil";
 
@@ -80,7 +80,7 @@ export function readHeadTable(buffer: FontBuffer): HeadTable {
   assertEqual("Head table magic number", magicNumber, EXPECTED_MAGIC_NUMBER);
   const parsedFlags = parseHeadFlags(flags);
   const parsedMacStyle = parseMacStyles(macStyle);
-  buffer.assertEmpty("HEAD");
+  assertBufferEmpty(buffer, "HEAD");
 
   return {
     ...other,
@@ -91,24 +91,24 @@ export function readHeadTable(buffer: FontBuffer): HeadTable {
 
 function read(buffer: FontBuffer) {
   return {
-    majorVersion: buffer.readUInt16(),
-    minorVersion: buffer.readUInt16(),
-    fontRevision: buffer.readFixed(),
-    checksumAdjustment: buffer.readUInt32(),
-    magicNumber: buffer.readUInt32(),
-    flags: buffer.readUInt16(),
-    unitsPerEm: buffer.readUInt16(),
-    created: buffer.readLongDateTime(),
-    modified: buffer.readLongDateTime(),
-    xMin: buffer.readInt16(),
-    yMin: buffer.readInt16(),
-    xMax: buffer.readInt16(),
-    yMax: buffer.readInt16(),
-    macStyle: buffer.readUInt16(),
-    lowestRecPPEM: buffer.readUInt16(),
-    fontDirectionHint: buffer.readInt16(),
-    indexToLocFormat: buffer.readInt16(),
-    glyphDataFormat: buffer.readInt16(),
+    majorVersion: readUInt16(buffer),
+    minorVersion: readUInt16(buffer),
+    fontRevision: readFixed(buffer),
+    checksumAdjustment: readUInt32(buffer),
+    magicNumber: readUInt32(buffer),
+    flags: readUInt16(buffer),
+    unitsPerEm: readUInt16(buffer),
+    created: readLongDateTime(buffer),
+    modified: readLongDateTime(buffer),
+    xMin: readInt16(buffer),
+    yMin: readInt16(buffer),
+    xMax: readInt16(buffer),
+    yMax: readInt16(buffer),
+    macStyle: readUInt16(buffer),
+    lowestRecPPEM: readUInt16(buffer),
+    fontDirectionHint: readInt16(buffer),
+    indexToLocFormat: readInt16(buffer),
+    glyphDataFormat: readInt16(buffer),
   };
 }
 

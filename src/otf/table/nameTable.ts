@@ -1,4 +1,4 @@
-import { FontBuffer } from "../../io/buffer";
+import { assertBufferEmpty, extractBytes, FontBuffer, readUInt16 } from "../../io/buffer";
 import { FontCorruptedError, NotSupportedError } from "../../util/errors";
 import { arrayFrom, sort } from "../../util/misc";
 import { decodeString } from "../common/encoding";
@@ -22,20 +22,20 @@ export type NameRecords = {
 };
 
 export function readNameTable(buffer: FontBuffer): NameTable {
-  const version = buffer.readUInt16();
+  const version = readUInt16(buffer);
   if (version !== 0) {
     throw new NotSupportedError(`Name Version ${version}`);
     //TODO version 1
   }
-  const count = buffer.readUInt16();
-  const storageOffset = buffer.readUInt16();
+  const count = readUInt16(buffer);
+  const storageOffset = readUInt16(buffer);
   const nameRecords = arrayFrom(count, () => readNameRecord(buffer));
 
   //TODO data in between current position and storageOffset
-  buffer.pos = storageOffset;
+  buffer._pos = storageOffset;
 
   const data = decodeToNameTable(buffer, version, nameRecords);
-  buffer.assertEmpty("NAME");
+  assertBufferEmpty(buffer, "NAME");
   return data;
 }
 
@@ -65,23 +65,23 @@ interface DecodedRecord {
 }
 
 function decodeNameRecords(buffer: FontBuffer, nameRecords: ReturnType<typeof readNameRecord>[]) {
-  const initialPosition = buffer.pos;
+  const initialPosition = buffer._pos;
   const decodedRecords: DecodedRecord[] = [];
 
   let previousLength = 0;
   for (const nameRecord of sort(nameRecords, "stringOffset")) {
     const expectedOffset = initialPosition + nameRecord.stringOffset;
-    if (expectedOffset === buffer.pos - previousLength) {
+    if (expectedOffset === buffer._pos - previousLength) {
       // Sometimes names are reused, so buffer.pos will be the same as in the last iteration
-      buffer.pos -= previousLength;
-    } else if (expectedOffset !== buffer.pos) {
+      buffer._pos -= previousLength;
+    } else if (expectedOffset !== buffer._pos) {
       throw new FontCorruptedError("Invalid name table offset");
     }
     previousLength = nameRecord.length;
 
     const name = getRecordName(nameRecord.nameId);
 
-    const data = buffer.extractBytes(nameRecord.length);
+    const data = extractBytes(buffer, nameRecord.length);
     const value = decodeString(data, nameRecord.platformId, nameRecord.encodingId);
 
     const language = getLanguageTag(nameRecord.platformId, nameRecord.languageId);
@@ -101,11 +101,11 @@ function getRecordName(nameId: number): NameRecordKey | undefined {
 
 function readNameRecord(buffer: FontBuffer) {
   return {
-    platformId: buffer.readUInt16(),
-    encodingId: buffer.readUInt16(),
-    languageId: buffer.readUInt16(),
-    nameId: buffer.readUInt16(),
-    length: buffer.readUInt16(),
-    stringOffset: buffer.readUInt16(),
+    platformId: readUInt16(buffer),
+    encodingId: readUInt16(buffer),
+    languageId: readUInt16(buffer),
+    nameId: readUInt16(buffer),
+    length: readUInt16(buffer),
+    stringOffset: readUInt16(buffer),
   };
 }

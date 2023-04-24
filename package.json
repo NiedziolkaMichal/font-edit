@@ -22,6 +22,9 @@
     "src",
     "dist"
   ],
+  "browser": {
+    "fs": false
+  },
   "devDependencies": {
     "@types/decompress": "^4.2.4",
     "@types/jest": "^29.5.0",

@@ -1,53 +1,69 @@
 import { HeaderData } from "./otfReader";
 import { TableTag } from "./openType";
-import { readNameTable } from "./table/nameTable";
 import { FontBuffer } from "../io/buffer";
+import { readNameTable } from "./table/nameTable";
 import { readHeadTable } from "./table/headTable";
 import { readMaxpTable } from "./table/maxpTable";
 import { readHheaTable } from "./table/hheaTable";
 import { readOs2Table } from "./table/os2Table";
 
-export class Font {
-  readonly #header;
-  #loadedTables: Map<TableTag, unknown>;
+const internalsCache = new WeakMap<Font, Internals>();
 
+export class Font {
   constructor(header: HeaderData) {
-    this.#header = header;
-    this.#loadedTables = new Map();
+    createInternals(this, header);
   }
 
   get name() {
-    return this.getTable(TableTag.NAME, readNameTable);
+    return getTable(this, TableTag.NAME, readNameTable);
   }
 
   get head() {
-    return this.getTable(TableTag.HEAD, readHeadTable);
+    return getTable(this, TableTag.HEAD, readHeadTable);
   }
 
   get maxp() {
-    return this.getTable(TableTag.MAXP, readMaxpTable);
+    return getTable(this, TableTag.MAXP, readMaxpTable);
   }
 
   get hhea() {
-    return this.getTable(TableTag.HHEA, readHheaTable);
+    return getTable(this, TableTag.HHEA, readHheaTable);
   }
 
   get os2() {
-    return this.getTable(TableTag.OS2, readOs2Table);
+    return getTable(this, TableTag.OS2, readOs2Table);
   }
+}
 
-  private getTable<T>(tag: TableTag, reader: (buffer: FontBuffer) => T) {
-    if (this.#loadedTables.has(tag)) {
-      return this.#loadedTables.get(tag) as T;
-    }
-    //TODO after loading data, we could release DataView, so eventually ArrayBuffer can be garbage collected
-    for (const table of this.#header.tables) {
-      if (table.tableTag === tag) {
-        const data = reader(table.data);
-        this.#loadedTables.set(tag, data);
-        return data;
-      }
-    }
-    return undefined;
+interface Internals {
+  _header: HeaderData;
+  _loaded: Map<TableTag, unknown>;
+}
+
+function createInternals(font: Font, header: HeaderData) {
+  internalsCache.set(font, {
+    _header: header,
+    _loaded: new Map(),
+  });
+}
+
+function getInternals(font: Font) {
+  return internalsCache.get(font)!;
+}
+
+function getTable<T>(font: Font, tag: TableTag, reader: (buffer: FontBuffer) => T) {
+  const internals = getInternals(font);
+
+  if (internals._loaded.has(tag)) {
+    return internals._loaded.get(tag) as T;
   }
+  //TODO after loading data, we could release DataView, so eventually ArrayBuffer can be garbage collected
+  for (const table of internals._header.tables) {
+    if (table.tableTag === tag) {
+      const data = reader(table.data);
+      internals._loaded.set(tag, data);
+      return data;
+    }
+  }
+  return undefined;
 }

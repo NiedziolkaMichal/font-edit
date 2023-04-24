@@ -1,4 +1,4 @@
-import { FontBuffer } from "../../io/buffer";
+import { assertBufferEmpty, FontBuffer, readInt16, readUInt16, readVersion } from "../../io/buffer";
 import { assertEqual } from "../../util/errors";
 
 export interface HheaTable {
@@ -34,28 +34,28 @@ export function readHheaTable(buffer: FontBuffer): HheaTable {
   const { version, r1, r2, r3, r4, ...data } = read(buffer);
   assertEqual("HHEA version", version, 1);
   assertEqual("HHEA reserved", r1 + r2 + r3 + r4, 0);
-  buffer.assertEmpty("HHEA");
+  assertBufferEmpty(buffer, "HHEA");
   return data;
 }
 
 function read(buffer: FontBuffer) {
   return {
-    version: buffer.readVersion(),
-    ascender: buffer.readInt16(),
-    descender: buffer.readInt16(),
-    lineGap: buffer.readInt16(),
-    advanceWidthMax: buffer.readUInt16(),
-    minLeftSideBearing: buffer.readInt16(),
-    minRightSideBearing: buffer.readInt16(),
-    xMaxExtent: buffer.readInt16(),
-    caretSlopeRise: buffer.readInt16(),
-    caretSlopeRun: buffer.readInt16(),
-    caretOffset: buffer.readInt16(),
-    r1: buffer.readInt16(),
-    r2: buffer.readInt16(),
-    r3: buffer.readInt16(),
-    r4: buffer.readInt16(),
-    metricDataFormat: buffer.readInt16(),
-    numberOfHMetrics: buffer.readUInt16(),
+    version: readVersion(buffer),
+    ascender: readInt16(buffer),
+    descender: readInt16(buffer),
+    lineGap: readInt16(buffer),
+    advanceWidthMax: readUInt16(buffer),
+    minLeftSideBearing: readInt16(buffer),
+    minRightSideBearing: readInt16(buffer),
+    xMaxExtent: readInt16(buffer),
+    caretSlopeRise: readInt16(buffer),
+    caretSlopeRun: readInt16(buffer),
+    caretOffset: readInt16(buffer),
+    r1: readInt16(buffer),
+    r2: readInt16(buffer),
+    r3: readInt16(buffer),
+    r4: readInt16(buffer),
+    metricDataFormat: readInt16(buffer),
+    numberOfHMetrics: readUInt16(buffer),
   };
 }
